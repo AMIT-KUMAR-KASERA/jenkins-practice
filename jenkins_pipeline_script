@@ -1,0 +1,75 @@
+pipeline {
+    agent any
+    environment {
+        name ='amit'
+    }
+    parameters 
+    {
+        string(name: 'persons', defaultValue: 'sourav sharma', description: "who are you?")
+        booleanParam(name: 'isMale', defaultValue: true,  description: "")
+        choice(name: 'city', choices: ['jaipur','mumbai','pune'],  description: "")
+    }
+
+    stages {
+        stage('Run as a command') {
+            steps {
+              sh '''
+              ls
+              date
+              pwd
+             
+             
+              '''
+            }
+        }
+        stage('environment variable') {
+            environment {
+        username ='amitkasera'
+                    }
+            
+            steps {
+               sh 'echo "${BUILD_ID}"'
+                 sh 'echo "${name}"'
+                    sh 'echo "${username}"'
+                
+               
+            }
+        }
+        stage('parameters') {
+            steps {
+                sh 'echo "${username}"'
+                 sh 'echo "${persons}"'
+            }
+        }
+        stage('continue ?') {
+            input {
+                message "should we continue?"
+                ok "yes we should continue"
+            }
+            steps {
+                echo 'deploy on product'
+            }
+        }
+        stage('deploy on prod') {
+            steps {
+                echo 'deploy on product'
+            }
+        }
+    }
+    post
+    {
+        always
+        {
+            echo "i am always say hellow worls"
+        }
+        failure
+        {
+            echo "failure"
+            
+        }
+        success{
+            echo "success"
+        }
+    }
+   
+}
